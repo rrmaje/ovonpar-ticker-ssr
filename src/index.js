@@ -1,10 +1,19 @@
 import http from 'http';
+//var fs = require('fs')
+//var https = require('https')
 
 let app = require('./server').default;
 
+/*
+const server = https.createServer({
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('server.cert')
+}, app);
+*/
 const server = http.createServer(app);
 
 let currentApp = app;
+
 
 server.listen(process.env.PORT || 3000, error => {
   if (error) {

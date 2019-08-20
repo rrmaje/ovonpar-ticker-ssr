@@ -1,11 +1,11 @@
 import { BehaviorSubject } from 'rxjs';
 
-import { handleResponse} from '../_helpers';
-import {config} from './config';
+import { handleResponse } from '../_helpers';
+import { config } from './config';
 
 var user;
-if (typeof window !== 'undefined'){
-user = JSON.parse(localStorage.getItem('currentUser'));
+if (typeof window !== 'undefined') {
+    user = JSON.parse(localStorage.getItem('currentUser'));
 }
 
 const currentUserSubject = new BehaviorSubject(user);
@@ -26,11 +26,11 @@ function login(username, password) {
         body: JSON.stringify({ username, password })
     };
 
-    return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
+    return fetch(`${config.ostApiUrl}/v1/login`, requestOptions)
         .then(handleResponse)
         .then(user => {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
-        if (typeof window !== 'undefined') localStorage.setItem('currentUser', JSON.stringify(user));
+            if (typeof window !== 'undefined') localStorage.setItem('currentUser', JSON.stringify(user));
             currentUserSubject.next(user);
 
             return user;
@@ -47,7 +47,7 @@ function loginWithReset(username, password, genhash) {
         body: JSON.stringify({ username, password, genhash })
     };
 
-    return fetch(`${config.apiUrl}/users/authenticate/reset`, requestOptions)
+    return fetch(`${config.ostApiUrl}/v1/login/reset`, requestOptions)
         .then(handleResponse)
         .then(user => {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -64,7 +64,7 @@ function sendResetLink(username) {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username,  link: `${location.origin}/auth?genhash=${genhash}`})
+            body: JSON.stringify({ username, link: `${location.origin}/auth?genhash=${genhash}` })
         };
 
         return fetch(`${config.mailerApiUrl}/users/authenticate/reset/link`, requestOptions)
@@ -79,7 +79,11 @@ function sendResetLink(username) {
                 return data.message;
             }).catch(error => {
                 return Promise.reject(error);
-            });
+            },
+                err => {
+                    return Promise.reject(err);
+                }
+            );
     })
 }
 
@@ -91,13 +95,9 @@ function genHash(username) {
         body: JSON.stringify({ username })
     };
 
-    return fetch(`${config.apiUrl}/users/authenticate/genhash`, requestOptions)
+    return fetch(`${config.ostApiUrl}/v1/login/genhash`, requestOptions)
         .then(handleResponse)
         .then(res => {
-            if ([400].indexOf(res.status) !== -1) {
-
-                return Promise.reject('Error generating hash');
-            }
             return res.genhash;
         });
 }

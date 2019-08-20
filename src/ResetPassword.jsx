@@ -66,7 +66,7 @@ export default function ResetPassword(props) {
                 },
                 error => {
                   setSubmitting(false);
-                  setErrors({error});
+                  setErrors('Operation failed');
                 }
               );
           }}

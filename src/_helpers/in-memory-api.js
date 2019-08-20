@@ -1,17 +1,18 @@
 export function authenticationHandler(req, Users) {
 
-	const isLoggedIn = req.header('Authorization') === 'Bearer jwt-token';
+	const isLoggedIn = req.header('OST') !== 'undefined';
 
 	return new Promise((resolve, reject) => {
 
-			if (req.url.endsWith('/users/authenticate') && req.method === 'POST') {
+		
+			if (req.url.endsWith('/v1/login') && req.method === 'POST') {
 				const params = req.body;
 				const user = Users.get().find(x => x.username === params.username && x.password === params.password);
 				if (!user) return error('Username or password is incorrect');
 				return ok({
 					id: user.id,
 					username: user.username,
-					token: 'jwt-token'
+					token: 'OST Key'
 				});
 			}
 
@@ -32,7 +33,7 @@ export function authenticationHandler(req, Users) {
 			}
 
 
-			if (req.url.endsWith('/users/authenticate/genhash') && req.method === 'POST') {
+			if (req.url.endsWith('/login/genhash') && req.method === 'POST') {
 				const params = req.body;
 				const user = Users.get().find(x => x.username === params.username);
 				if (!user) return error('User not found');
@@ -59,7 +60,7 @@ export function authenticationHandler(req, Users) {
 				return ok({
 					id: user.id,
 					username: user.username,
-					token: 'jwt-token'
+					token: 'OST Key'
 				});
 			}
 

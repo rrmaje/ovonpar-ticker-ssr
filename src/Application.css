@@ -27,9 +27,18 @@
 
 .instruments {
   font-family: arial, sans-serif;
-  width: 100%;
   text-align: right;
 }
+
+.instruments {
+  border-collapse: collapse;
+}
+
+.instruments td, .instruments th  {
+  border: 1px solid #3a855f;
+  padding: 8px;
+}
+
 
 .numeric{
   border: none;

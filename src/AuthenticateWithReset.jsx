@@ -71,7 +71,8 @@ export default function AuthenticateWithReset(props) {
                 },
                 error => {
                   setSubmitting(false);
-                  setStatus(error);
+                  console.error(error);
+                  setStatus('Reset failed');
                 }
               );
           }}

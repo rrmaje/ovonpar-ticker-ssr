@@ -72,7 +72,7 @@ export default function SignIn(props) {
                 },
                 error => {
                   setSubmitting(false);
-                  setStatus(error);
+                  setStatus('Login failed');
                 }
               );
           }}

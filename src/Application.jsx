@@ -11,6 +11,8 @@ import {
 } from 'react-router-dom';
 
 import Instruments from './Instruments.jsx';
+import Trades from './Trades.jsx';
+
 import { CssBaseline } from '@material-ui/core';
 import { Box } from '@material-ui/core';
 import { Container } from '@material-ui/core';
@@ -21,6 +23,7 @@ import { authenticationService } from './_services';
 import { PrivateRoute } from './_components';
 import { HomePage } from './HomePage';
 import './Application.css'
+
 
 export default class Application extends React.Component {
 
@@ -54,6 +57,7 @@ export default class Application extends React.Component {
                   <div>
                     <NavLink exact activeClassName="active" to="/">Home</NavLink>
                     <NavLink exact activeClassName="active" to="/instruments">Instruments</NavLink>{' '}
+                    <NavLink exact activeClassName="active" to="/trades">Trades</NavLink>{' '}
                     <NavLink onClick={this.logout} to="/signin">Logout</NavLink>
                   </div>
                 }
@@ -66,6 +70,7 @@ export default class Application extends React.Component {
                 <Route path="/reset" component={ResetPassword} />
                 <Route path="/signup" component={SignUp} />
                 <Route exact path="/instruments" component={Instruments} />
+                <Route exact path="/trades" component={Trades} />
                 <PrivateRoute exact path="/" component={HomePage} />
                 <Route render={() => <h1>Page not found</h1>} />
               </Switch>

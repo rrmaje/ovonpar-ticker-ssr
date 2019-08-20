@@ -13,8 +13,17 @@ const theme = createMuiTheme({
     secondary: {
       light: '#004d40',
       main: '#39796b',
-      dark: '##00251a',
+      dark: '#00251a',
       contrastText: '#ffffff',
+    },
+  },
+  overrides: {
+    
+    MuiTableCell: {
+      // Name of the rule
+      root: {
+        // Some CSS
+      },
     },
   },
 });

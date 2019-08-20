@@ -12,6 +12,7 @@ import { Users, authenticationHandler } from '@/_helpers';
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 const server = express();
+
 server.use(express.json());
 server
 	.disable('x-powered-by')
