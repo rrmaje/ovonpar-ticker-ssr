@@ -17,7 +17,7 @@ server.use(express.json());
 server
 	.disable('x-powered-by')
 	.use(express.static(process.env.RAZZLE_PUBLIC_DIR))
-	.post('/*', (req, res) => {
+	/*.post('/*', (req, res) => {
 		return authenticationHandler(req, Users).then(result => {
 			res.send(JSON.stringify(result));
 		},
@@ -27,7 +27,7 @@ server
 			}
 		)
 
-	})
+	})*/
 	.get('/*', (req, res) => {
 		const context = {};
 		const sheets = new ServerStyleSheets();

@@ -1,18 +1,17 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core';
 import { Box } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { authenticationService } from './_services';
-import { history } from './_helpers';
+import { authenticationService } from '../_services';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -39,40 +38,35 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignIn(props) {
+export default function ResetPassword(props) {
 
   const classes = useStyles();
-  if (authenticationService.currentUserValue) {
-    history.push('/');
-  }
 
   return (
 
     <Container maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Sign in
+          Reset your password
         </Typography>
         <Formik
           initialValues={{
-            email: '',
-            password: ''
+            email: ''
           }}
           validationSchema={Yup.object().shape({
             email: Yup.string().email().required('Email is required'),
-            password: Yup.string().required('Password is required')
           })}
-          onSubmit={({ email, password }, { setStatus, setSubmitting }) => {
+          onSubmit={({ email}, { setStatus, setSubmitting, setErrors }) => {
             setStatus();
-            authenticationService.login(email, password)
+            authenticationService.sendResetLink(email)
               .then(
-                user => {
-                  const { from } = props.location.state || { from: { pathname: "/" } };
-                  props.history.push(from);
+                result => {
+                  setSubmitting(false);
+                  setStatus(result);
                 },
                 error => {
                   setSubmitting(false);
-                  setStatus('Login failed');
+                  setErrors('Operation failed');
                 }
               );
           }}
@@ -92,18 +86,29 @@ export default function SignIn(props) {
 
               <form className={classes.form} onSubmit={handleSubmit}>
                 {status &&
-                  <Box my={2} color="error.main">
+                  <Box my={2} color="primary.main">
 
                     {status}
                   </Box>
+                }
+                {errors &&
+                  <Box my={2} color="error.main">
+
+                    {errors.error}
+                    
+                  </Box>
+                }
+                {isSubmitting && 
+                  <Box my={2} color="primary.main">
+                      Sending...
+                </Box>
                 }
                 <TextField InputProps={{
                   classes: {
                     notchedOutline: classes.notchedOutline
                   }
                 }} variant="outlined" margin="normal" onChange={handleChange} value={values.email} error={errors.email && touched.email} helperText={(errors.email && touched.email) && errors.email} fullWidth id="email" label="Email Address" name="email" autoFocus />
-                <TextField variant="outlined" onChange={handleChange}  margin="normal" value={values.password} error={errors.password && touched.password} helperText={(errors.password && touched.password) && errors.password} fullWidth name="password" label="Password" type="password" id="password" />
-                <Button type="submit" disabled={isSubmitting} fullWidth variant="contained" color="primary" className={classes.submit}>Sign In</Button>
+                <Button type="submit" disabled={isSubmitting} fullWidth variant="contained" color="primary" className={classes.submit}>Send</Button>
 
 
               </form>
@@ -113,15 +118,10 @@ export default function SignIn(props) {
           }}
         </Formik>
         <Grid container>
-          <Grid item xs>
-            <Link to="/reset" variant="body2">
-              Forgot password?
-              </Link>
-          </Grid>
           <Grid item>
-            <Link to="/signup">
-              {"Don't have an account? Sign Up"}
-            </Link>
+            <Link to="/auth" variant="body2">
+              Sign in with new password
+              </Link>
           </Grid>
         </Grid>
       </div>

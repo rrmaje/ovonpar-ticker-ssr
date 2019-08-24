@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Instrument from './Instrument.jsx';
-import { config } from './_services';
+import { config } from '../_services';
 
 import { withStyles } from '@material-ui/styles';
 
@@ -110,7 +110,7 @@ class Instruments extends React.Component {
       <TableRow>
         <TableCell className={classes.tableCell}>Instrument</TableCell>
         <TableCell className={classes.tableCell} align="right">Bid Price</TableCell>
-        <TableCell className={classes.tableCell} align="right">Bid Quanityt</TableCell>
+        <TableCell className={classes.tableCell} align="right">Bid Quantity</TableCell>
         <TableCell className={classes.tableCell} align="right">Ask Price</TableCell>
         <TableCell className={classes.tableCell} align="right">Ask Quantity</TableCell>
         <TableCell className={classes.tableCell} align="right">Last Price</TableCell>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Trade from './Trade.jsx';
-import { config } from './_services';
+import { config } from '../_services';
 
 
 import Table from '@material-ui/core/Table';
@@ -14,7 +14,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 
 import { Container } from '@material-ui/core';
-
+import { authenticationService } from '../_services';
 import { withStyles } from '@material-ui/styles';
 
 
@@ -76,31 +76,45 @@ class Trades extends React.Component {
   componentDidMount() {
     this._isMounted = true;
 
-    var socket = new WebSocket(`${config.marketGatewayUrl}` + "/trades");
+    const currentUser = authenticationService.currentUserValue;
+    if (currentUser && currentUser.token) {
 
-    socket.onmessage = function (event) {
-      var message = JSON.parse(event.data);
-      var messageType = message.type;
-      delete message.type;
-      if (this._isMounted) {
-        if (messageType === "Trade") {
-          var trades = this.state.trades;
-          trades.push(message);
+      var socket = new WebSocket(`${config.marketGatewayUrl}/trades?OST=${currentUser.token}`);
+      console.log('Mount');
+      socket.onmessage = function (event) {
+        var message = JSON.parse(event.data);
+        var messageType = message.type;
+        delete message.type;
+        if (this._isMounted) {
+          if (messageType === "Trade") {
+            var trades = this.state.trades;
+            trades.push(message);
 
-          this.setState({ trades: trades });
-        } else if (messageType === "Instrument") {
-          var instruments = extend({}, this.state.instruments);
+            this.setState({ trades: trades });
+          } else if (messageType === "Instrument") {
+            var instruments = extend({}, this.state.instruments);
 
-          instruments[message.instrument] = message;
+            instruments[message.instrument] = message;
 
-          this.setState({ instruments: instruments });
+            this.setState({ instruments: instruments });
+          }
         }
-      }
-    }.bind(this);
+      }.bind(this);
+
+      socket.onerror = function (event) {
+        console.error(event);
+      }.bind(this);
+
+      socket.onclose = function (event) {
+        console.log('Market Gateway connection closed');
+      }.bind(this);
+    }
+
   }
 
   componentWillUnmount() {
     this._isMounted = false;
+    console.log('Unmount');
   }
 
   render() {
@@ -112,7 +126,7 @@ class Trades extends React.Component {
     var instruments = this.state.instruments;
 
     var tradeNodes = this.state.trades.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map(function (t) {
-      const k = t.buyOrderNumber+'-'+t.matchNumber;
+      const k = t.buyOrderNumber + '-' + t.timestamp + '-' + t.sellOrderNumber;
       return (
         <Trade key={k}
           instrument={instruments[t.instrument]}
@@ -126,9 +140,10 @@ class Trades extends React.Component {
           <Table className={classes.table} size="medium">
             <TableHead>
               <TableRow>
-                <TableCell className={classes.tableCell}>Buy order no.</TableCell>
+                <TableCell className={classes.tableCell}>Match no.</TableCell>
+                <TableCell className={classes.tableCell} align="right">Buy order no.</TableCell>
                 <TableCell className={classes.tableCell} align="right">Sell order no.</TableCell>
-                <TableCell className={classes.tableCell} align="right">Match no.</TableCell>
+                <TableCell className={classes.tableCell} align="right">Timestamp</TableCell>
                 <TableCell className={classes.tableCell} align="right">Instrument</TableCell>
                 <TableCell className={classes.tableCell} align="right">Price</TableCell>
                 <TableCell className={classes.tableCell} align="right">Quantity</TableCell>

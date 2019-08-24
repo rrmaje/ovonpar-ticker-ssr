@@ -5,14 +5,13 @@ import { Grid } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import { Box } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { userService } from './_services';
-
+import { authenticationService } from '../_services';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -28,25 +27,31 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-
+  notchedOutline: {
+    borderWidth: "1px",
+    //borderColor: "green !important"
+  },
 }));
 
-export default function SignUp(props) {
+export default function SignIn(props) {
+
   const classes = useStyles();
+  if (authenticationService.currentUserValue) {
+    props.history.push('/');
+  }
 
   return (
+
     <Container maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Sign up
+          Sign in
         </Typography>
-
-
         <Formik
           initialValues={{
             email: '',
@@ -54,18 +59,19 @@ export default function SignUp(props) {
           }}
           validationSchema={Yup.object().shape({
             email: Yup.string().email().required('Email is required'),
-            password: Yup.string().required('Password is required'),
+            password: Yup.string().required('Password is required')
           })}
-          onSubmit={({ email, password}, { setStatus, setSubmitting }) => {
+          onSubmit={({ email, password }, { setStatus, setSubmitting }) => {
             setStatus();
-            userService.newUser(email, password)
+            authenticationService.login(email, password)
               .then(
                 user => {
-                  props.history.push('/signin');
+                  const { from } = props.location.state || { from: { pathname: "/" } };
+                  props.history.push(from);
                 },
                 error => {
                   setSubmitting(false);
-                  setStatus(error);
+                  setStatus('Login failed');
                 }
               );
           }}
@@ -90,40 +96,14 @@ export default function SignUp(props) {
                     {status}
                   </Box>
                 }
+                <TextField InputProps={{
+                  classes: {
+                    notchedOutline: classes.notchedOutline
+                  }
+                }} variant="outlined" margin="normal" onChange={handleChange} value={values.email} error={errors.email && touched.email} helperText={(errors.email && touched.email) && errors.email} fullWidth id="email" label="Email Address" name="email" autoFocus />
+                <TextField variant="outlined" onChange={handleChange}  margin="normal" value={values.password} error={errors.password && touched.password} helperText={(errors.password && touched.password) && errors.password} fullWidth name="password" label="Password" type="password" id="password" />
+                <Button type="submit" disabled={isSubmitting} fullWidth variant="contained" color="primary" className={classes.submit}>Sign In</Button>
 
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
-                      onChange={handleChange} value={values.email} error={errors.email && touched.email} helperText={(errors.email && touched.email) && errors.email}
-                      fullWidth
-                      id="email"
-                      label="Email Address"
-                      name="email"
-                      autoComplete="email" autoFocus
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
-                      onChange={handleChange} margin="normal" value={values.password} error={errors.password && touched.password} helperText={(errors.password && touched.password) && errors.password}
-                      fullWidth
-                      name="password"
-                      label="Password"
-                      type="password"
-                      id="password"
-                    />
-                  </Grid>
-                </Grid>
-                <Button
-                  type="submit"
-                  fullWidth disabled={isSubmitting}
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Sign Up
-          </Button>
 
               </form>
 
@@ -131,18 +111,22 @@ export default function SignUp(props) {
 
           }}
         </Formik>
-
-
-        <Grid container justify="flex-end">
-          <Grid item>
-            <Link to="/signin" variant="body2">
-              Already have an account? Sign in
+        <Grid container>
+          <Grid item xs>
+            <Link to="/reset" variant="body2">
+              Forgot password?
               </Link>
           </Grid>
+          <Grid item>
+            <Link to="/signup">
+              {"Don't have an account? Sign Up"}
+            </Link>
+          </Grid>
         </Grid>
-
       </div>
-    </Container>
-  );
-}
 
+    </Container>
+  )
+
+
+}
