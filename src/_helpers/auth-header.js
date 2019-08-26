@@ -9,3 +9,13 @@ export function authHeader() {
         return {};
     }
 }
+
+export function authHeaderWithContentType() {
+    // return authorization header with jwt token
+    const currentUser = authenticationService.currentUserValue;
+    if (currentUser && currentUser.token) {
+        return { 'Content-Type': 'application/json' , OST: `${currentUser.token}` };
+    } else {
+        return {};
+    }
+}

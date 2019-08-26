@@ -4,6 +4,8 @@ import SignIn from './_components/SignIn.jsx';
 import SignUp from './_components/SignUp.jsx';
 import ResetPassword from './_components/ResetPassword.jsx';
 import AuthenticateWithReset from './_components/AuthenticateWithReset.jsx';
+import OrderEntry from './_components/OrderEntry.jsx';
+import Orders from './_components/Orders.jsx';
 import {
   Route,
   Switch,
@@ -58,7 +60,7 @@ export default class Application extends React.Component {
   render() {
     const { currentUser } = this.state;
     return (
-      <div>
+      <div className="container">
         <CssBaseline />
         <Container style={{ padding: 0 }} maxWidth="xl">
           <Box my={2}>
@@ -69,6 +71,7 @@ export default class Application extends React.Component {
                   <NavLink exact activeClassName="active" to="/">Home</NavLink>
                   <NavLink exact activeClassName="active" to="/instruments">Market Data</NavLink>{' '}
                   <NavLink exact activeClassName="active" to="/trades">Trade Events</NavLink>{' '}
+                  <NavLink exact activeClassName="active" to="/orders">Orders</NavLink>{' '}
                   <NavLink onClick={this.logout} to="/signin" style={{ float: 'right', paddingRight: 20 }}>Logout</NavLink>
                 </div>
               }
@@ -83,13 +86,15 @@ export default class Application extends React.Component {
               <Route path="/terms" component={Terms} />
               <Route exact path="/instruments" component={Instruments} />
               <Route exact path="/trades" component={Trades} />
+              <Route exact path="/orders/new" component={OrderEntry} />
+              <Route exact path="/orders" component={Orders} />
               <PrivateRoute exact path="/" component={HomePage} />
               <Route render={() => <h1>Page not found</h1>} />
             </Switch>
           </Box>
           </Container>
 
-          <div className="footer">© 2019 Ovonpar Stock Ticker. All rights reserved | <NavLink exact to="/terms" activeClassName="footerActive" style={{ color: 'white' }}>Terms of Service</NavLink></div>
+          <div className="footer">© 2019 Ovonpar Stock Ticker. All rights reserved | <NavLink exact to="/terms" >Terms of Service</NavLink></div>
         
       </div>
     );

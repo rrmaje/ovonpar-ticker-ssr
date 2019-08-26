@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import { Container } from '@material-ui/core';
 
 
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -115,6 +116,8 @@ class Instruments extends React.Component {
         <TableCell className={classes.tableCell} align="right">Ask Quantity</TableCell>
         <TableCell className={classes.tableCell} align="right">Last Price</TableCell>
         <TableCell className={classes.tableCell} align="right">Last Quantity</TableCell>
+        <TableCell className={classes.tableCell} align="right">-</TableCell>
+        <TableCell className={classes.tableCell} align="right">-</TableCell>
       </TableRow>
     </TableHead>
     <TableBody>

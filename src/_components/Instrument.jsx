@@ -2,6 +2,7 @@ import React from 'react';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import { Link } from 'react-router-dom';
 
 
 export default class Instrument extends React.Component {
@@ -30,6 +31,19 @@ export default class Instrument extends React.Component {
         <TableCell align="right">{this.formatSize(this.props.bbo, "askSize")}</TableCell>
         <TableCell align="right">{this.formatPrice(this.props.trade, "price")}</TableCell>
         <TableCell align="right">{this.formatSize(this.props.trade, "size")}</TableCell>
+        <TableCell align="right"><Link to= {{
+  pathname: '/orders/new',
+  state: {
+    side: 66,
+    instrument: this.props.instrument.instrument
+  }}}>Buy</Link></TableCell>
+        <TableCell align="right"><Link to= {{
+  pathname: '/orders/new',
+  state: {
+    side: 83,
+    instrument: this.props.instrument.instrument
+  }}}>Sell</Link></TableCell>
+        
       </TableRow>
     );
   }

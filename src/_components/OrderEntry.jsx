@@ -5,16 +5,12 @@ import { Grid } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import { Box } from '@material-ui/core';
-import { FormControlLabel } from '@material-ui/core';
-import { Checkbox } from '@material-ui/core';
-import {NavLink} from 'react-router-dom';
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { userService } from '../_services';
+import { orderEntry } from '../_services';
 
 
 const useStyles = makeStyles(theme => ({
@@ -27,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'left',
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -39,38 +35,55 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-export default function SignUp(props) {
+const sideToString = (side) => {
+  return side == 83 ? 'Sell' : 'Buy';
+}
+
+export default function OrderEntry(props) {
   const classes = useStyles();
 
   return (
     <Container maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Sign up
+          Order Entry
         </Typography>
-
+        <Box my={1} style={{fontSize: 14}}>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+          Side: {sideToString(props.location.state.side)}
+          </Grid>
+          <Grid item>
+          Instrument: {props.location.state.instrument} 
+          </Grid>
+          </Grid>
+       </Box>
 
         <Formik
           initialValues={{
-            email: '',
-            password: '',
-            policy: false
+            side: props.location.state.side,
+            instrument: props.location.state.instrument,
+            quantity: '',
+            price: '',
           }}
           validationSchema={Yup.object().shape({
-            email: Yup.string().email().required('Email is required'),
-            password: Yup.string().required('Password is required'),
-            policy: Yup.boolean().oneOf([true], 'You must agree to the Policy'),
+            side: Yup.number().required('Error, undefined order side'),
+            instrument: Yup.string().required('Error, undefined instrument'),
+            quantity: Yup.number().integer().positive().required('Quantity is required'),
+            price: Yup.number().positive().required('Price is required'),
           })}
-          onSubmit={({ email, password, policy}, { setStatus, setSubmitting }) => {
+          onSubmit={({ side, instrument, quantity, price}, { setStatus, setSubmitting }) => {
             setStatus();
-            userService.newUser(email, password)
+            orderEntry.newOrder(side, instrument, Number(quantity), Number(price))
               .then(
-                user => {
-                  props.history.push('/signin');
+                order => {
+                  //props.history.push('/');
+                  setSubmitting(false);
+                  setStatus('Order Id:'+order.orderId);
                 },
                 error => {
                   setSubmitting(false);
-                  setStatus(error);
+                  setStatus('Operation failed');
                 }
               );
           }}
@@ -100,33 +113,23 @@ export default function SignUp(props) {
                   <Grid item xs={12}>
                     <TextField
                       variant="outlined"
-                      onChange={handleChange} value={values.email} error={errors.email && touched.email} helperText={(errors.email && touched.email) && errors.email}
+                      onChange={handleChange} value={values.quantity} error={errors.quantity && touched.quantity} helperText={(errors.quantity && touched.quantity) && errors.quantity}
                       fullWidth
-                      id="email"
-                      label="Email Address"
-                      name="email"
-                      autoComplete="email" autoFocus
+                      id="quantity"
+                      label="Quantity"
+                      name="quantity"
+                      autoComplete="quantity" autoFocus
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
                       variant="outlined"
-                      onChange={handleChange} margin="normal" value={values.password} error={errors.password && touched.password} helperText={(errors.password && touched.password) && errors.password}
+                      onChange={handleChange} margin="normal" value={values.price} error={errors.price && touched.price} helperText={(errors.price && touched.price) && errors.price}
                       fullWidth
-                      name="password"
-                      label="Password"
-                      type="password"
-                      id="password"
+                      name="price"
+                      label="Price PLN"
+                      id="price"
                     />
-                    <FormControlLabel
-                control={<Checkbox id="policy" name="policy" color="primary" onChange={handleChange} value={values.policy}/>} 
-                />
-                {'I agree to the '}<NavLink exact to="/terms" activeStyle={{ color: 'black' }} style={{ color: 'black' }}>Privacy Policy</NavLink>
-                {touched.policy && errors.policy &&
-                  <Box my={0} color="error.main">
-                    {errors.policy}
-                  </Box>
-                }
                   </Grid>
                 </Grid>
                 <Button
@@ -136,24 +139,14 @@ export default function SignUp(props) {
                   color="primary"
                   className={classes.submit}
                 >
-                  Sign Up
+                  Enter Order
           </Button>
-
               </form>
 
             );
 
           }}
         </Formik>
-
-
-        <Grid container justify="flex-end">
-          <Grid item>
-            <Link to="/signin" variant="body2">
-              Already have an account? Sign in
-              </Link>
-          </Grid>
-        </Grid>
 
       </div>
     </Container>
