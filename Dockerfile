@@ -1,6 +1,7 @@
-FROM mhart/alpine-node:4.3.1
+FROM mhart/alpine-node:10.16.0
 WORKDIR /src
 ADD . .
 RUN npm install
-EXPOSE 5000
+RUN npm run build
+EXPOSE 3000
 CMD ["npm", "run", "start:prod"]
