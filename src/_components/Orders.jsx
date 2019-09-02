@@ -163,8 +163,8 @@ class Orders extends React.Component {
                 <TableCell className={classes.tableCell}>Order ID</TableCell>
                 <TableCell className={classes.tableCell} align="right">Side</TableCell>
                 <TableCell className={classes.tableCell} align="right">Instrument</TableCell>
-                <TableCell className={classes.tableCell} align="right">Quantity</TableCell>
                 <TableCell className={classes.tableCell} align="right">Price</TableCell>
+                <TableCell className={classes.tableCell} align="right">Quantity</TableCell>
                 <TableCell className={classes.tableCell} align="right">-</TableCell>
               </TableRow>
             </TableHead>
