@@ -28,6 +28,9 @@ const styles = theme => ({
   table: {
     minWidth: 650,
   },
+  title: {
+    padding: 14,
+  },
   tableCell: {
     color: '#00251a',
   },
@@ -157,6 +160,9 @@ class Orders extends React.Component {
 
       <Container>
         <Paper className={classes.root}>
+        <div className={classes.title}>
+            <strong>Orders entered within current session</strong>
+          </div>
           <Table className={classes.table} size="medium">
             <TableHead>
               <TableRow>

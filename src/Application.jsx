@@ -70,7 +70,7 @@ export default class Application extends React.Component {
                 <div>
                   <NavLink exact activeClassName="active" to="/">Home</NavLink>
                   <NavLink exact activeClassName="active" to="/instruments">Market Data</NavLink>{' '}
-                  <NavLink exact activeClassName="active" to="/trades">Trade Events</NavLink>{' '}
+                  <NavLink exact activeClassName="active" to="/trades">Market Reporting</NavLink>{' '}
                   <NavLink exact activeClassName="active" to="/orders">Orders</NavLink>{' '}
                   <NavLink onClick={this.logout} to="/signin" style={{ float: 'right', paddingRight: 20 }}>Logout</NavLink>
                 </div>

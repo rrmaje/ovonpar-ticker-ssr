@@ -23,11 +23,11 @@ export default class Trade extends React.Component{
     return (
         <TableRow key={this.props.trade.buyOrderNumber+'-'+this.props.trade.timestamp+'-'+this.props.trade.sellOrderNumber}>
           <TableCell component="th" scope="row">
-            {this.props.trade.matchNumber}
+            {this.props.trade.timestamp}
           </TableCell>
+          <TableCell align="right">{this.props.trade.matchNumber}</TableCell>
           <TableCell align="right">{this.formatTextField(this.props.trade, "buyOrderNumber")}</TableCell>
           <TableCell align="right">{this.formatTextField(this.props.trade, "sellOrderNumber")}</TableCell>
-          <TableCell align="right">{this.props.trade.timestamp}</TableCell>
           <TableCell align="right">{this.props.trade.instrument}</TableCell>
           <TableCell align="right">{this.formatPrice(this.props.trade, "price")}</TableCell>
           <TableCell align="right">{this.formatSize(this.props.trade, "size")}</TableCell>

@@ -24,6 +24,9 @@ const styles = theme => ({
   table: {
     minWidth: 650,
   },
+  title: {
+    padding: 14,
+  },
   tableCell: {
     color: '#00251a',
   },
@@ -104,28 +107,31 @@ class Instruments extends React.Component {
       );
     }.bind(this));
     return (
-<Container>
-<Paper className={classes.root}>
-  <Table className={classes.table} size="medium">
-    <TableHead>
-      <TableRow>
-        <TableCell className={classes.tableCell}>Instrument</TableCell>
-        <TableCell className={classes.tableCell} align="right">Bid Price</TableCell>
-        <TableCell className={classes.tableCell} align="right">Bid Quantity</TableCell>
-        <TableCell className={classes.tableCell} align="right">Ask Price</TableCell>
-        <TableCell className={classes.tableCell} align="right">Ask Quantity</TableCell>
-        <TableCell className={classes.tableCell} align="right">Last Price</TableCell>
-        <TableCell className={classes.tableCell} align="right">Last Quantity</TableCell>
-        <TableCell className={classes.tableCell} align="right">-</TableCell>
-        <TableCell className={classes.tableCell} align="right">-</TableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-    {instrumentNodes}
-    </TableBody>
-  </Table>
-  </Paper>
-  </Container>
+      <Container>
+        <Paper className={classes.root}>
+          <div className={classes.title}>
+            <strong>Best Bid and Offer</strong>
+          </div>
+          <Table className={classes.table} size="medium">
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.tableCell}>Instrument</TableCell>
+                <TableCell className={classes.tableCell} align="right">Bid Price</TableCell>
+                <TableCell className={classes.tableCell} align="right">Bid Quantity</TableCell>
+                <TableCell className={classes.tableCell} align="right">Ask Price</TableCell>
+                <TableCell className={classes.tableCell} align="right">Ask Quantity</TableCell>
+                <TableCell className={classes.tableCell} align="right">Last Price</TableCell>
+                <TableCell className={classes.tableCell} align="right">Last Quantity</TableCell>
+                <TableCell className={classes.tableCell} align="right">-</TableCell>
+                <TableCell className={classes.tableCell} align="right">-</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {instrumentNodes}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Container>
 
     );
   }

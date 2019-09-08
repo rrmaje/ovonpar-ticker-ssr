@@ -26,6 +26,9 @@ const styles = theme => ({
     marginTop: theme.spacing(1),
     overflowX: 'auto',
   },
+  title: {
+    padding: 14,
+  },
   table: {
     minWidth: 650,
   },
@@ -137,13 +140,16 @@ class Trades extends React.Component {
 
       <Container>
         <Paper className={classes.root}>
+          <div className={classes.title}>
+            <strong>Matched orders within current session</strong>
+          </div>
           <Table className={classes.table} size="medium">
             <TableHead>
               <TableRow>
-                <TableCell className={classes.tableCell}>Match no.</TableCell>
+                <TableCell className={classes.tableCell}>Timestamp</TableCell>
+                <TableCell className={classes.tableCell} align="right">Match no.</TableCell>
                 <TableCell className={classes.tableCell} align="right">Buy order no.</TableCell>
                 <TableCell className={classes.tableCell} align="right">Sell order no.</TableCell>
-                <TableCell className={classes.tableCell} align="right">Timestamp</TableCell>
                 <TableCell className={classes.tableCell} align="right">Instrument</TableCell>
                 <TableCell className={classes.tableCell} align="right">Price</TableCell>
                 <TableCell className={classes.tableCell} align="right">Quantity</TableCell>
