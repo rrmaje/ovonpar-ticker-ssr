@@ -1,6 +1,5 @@
 export const config = {
-	apiUrl: 'http://localhost:3000',
-	mailerApiUrl: 'http://localhost:3010',
-	ostApiUrl: 'https://localhost:9443',
-	marketGatewayUrl: 'wss://localhost:9443'
+	mailerApiUrl: process.env.RAZZLE_MAILER_API_URL,
+	ostApiUrl: process.env.RAZZLE_OST_API_URL,
+	marketGatewayUrl: process.env.RAZZLE_MARKET_GATEWAY_URL
 }

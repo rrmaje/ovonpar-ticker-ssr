@@ -4,13 +4,13 @@ var https = require('https')
 
 let app = require('./server').default;
 
-
+/*
 const server = https.createServer({
   key: fs.readFileSync('server.key'),
   cert: fs.readFileSync('server.crt')
 }, app);
-
-//const server = http.createServer(app);
+*/
+const server = http.createServer(app);
 
 let currentApp = app;
 
