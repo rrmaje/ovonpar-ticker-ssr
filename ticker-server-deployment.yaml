@@ -1,0 +1,28 @@
+apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ticker-server
+spec:
+  selector:
+    matchLabels:
+      app: ticker-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ticker-server
+    spec:
+      containers:
+      - name: ticker-server 
+        image: docker.io/rrmaje/ovonpar-ticker-ssr
+        imagePullPolicy: Always
+        env:
+            - name: RAZZLE_MAILER_API_URL
+              value: "http://35.204.16.24:3010"
+            - name: RAZZLE_OST_API_URL
+              value: "http://35.204.211.84:9000"
+            - name: RAZZLE_MARKET_GATEWAY_URL
+              value: "ws://35.204.211.84:9000" 
+        ports:
+         - containerPort: 3000
+      
